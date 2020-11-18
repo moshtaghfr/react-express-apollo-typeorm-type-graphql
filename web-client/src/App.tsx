@@ -1,24 +1,33 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { gql, useQuery } from '@apollo/client';
+import { GetBooks } from './schemaTypes';
+
+const GET_BOOKS = gql`
+  query GetBooks {
+    books {
+      id
+      title
+    }
+  }
+`;
 
 const App = (): JSX.Element => {
+  const { loading, error, data } = useQuery<GetBooks>(GET_BOOKS);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {loading
+        ? 'Loading…'
+        : error
+        ? 'Error fetching books.'
+        : data && (
+            <ul>
+              {data.books.map((book) => (
+                <li key={book.id}>{book.title}</li>
+              ))}
+            </ul>
+          )}
     </div>
   );
 };
