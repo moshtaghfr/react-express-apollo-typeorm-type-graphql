@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Link, Route, Switch } from 'react-router-dom';
 
 import './App.css';
 import BookDetails from './components/BookDetails';
@@ -8,7 +8,9 @@ import BookList from './components/BookList';
 const App = (): JSX.Element => (
   <div className="App">
     <header>
-      <h1>Bookstore</h1>
+      <Link to="/">
+        <h1>Bookstore</h1>
+      </Link>
     </header>
     <Switch>
       <Route

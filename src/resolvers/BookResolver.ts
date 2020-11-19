@@ -9,6 +9,11 @@ export default class BookResolver {
     return Book.find();
   }
 
+  @Query(() => Book)
+  book(@Arg('id') id: string): Promise<Book | undefined> {
+    return Book.findOne(id);
+  }
+
   @Mutation(() => Book)
   async createBook(@Arg('data') data: CreateBookInput): Promise<Book> {
     const book = Book.create(data);
