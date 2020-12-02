@@ -10,8 +10,13 @@ export default class BookResolver {
   }
 
   @Query(() => Book)
-  book(@Arg('id') id: string): Promise<Book | undefined> {
-    return Book.findOne(id);
+  async book(@Arg('id') id: string): Promise<Book | undefined> {
+    const book = await Book.findOne(id);
+    if (!book) {
+      throw new Error('Book not found.');
+    } else {
+      return book;
+    }
   }
 
   @Mutation(() => Book)
