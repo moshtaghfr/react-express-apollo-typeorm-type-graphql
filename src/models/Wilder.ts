@@ -27,7 +27,9 @@ export const getDisplayName = (
     Strasbourg: 'SXB',
   };
 
-  return `[${cityCode[city] || city || '?'}] ${firstName} ${lastName}`;
+  return `[${cityCode[city] || city || '?'}${
+    trainingType === TrainingType.WORK_AND_STUDY ? ' – WnS' : ''
+  }] ${firstName} ${lastName}`;
 };
 
 @Entity()

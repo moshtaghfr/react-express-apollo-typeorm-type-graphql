@@ -31,4 +31,17 @@ describe('getDisplayName', () => {
       });
     });
   });
+
+  describe('When passed WORK_AND_STUDY as training type', () => {
+    it('returns display name with WnS label', () => {
+      expect(
+        getDisplayName(
+          'Lucie',
+          'Laforêt',
+          DEFAULT_CITY,
+          TrainingType.WORK_AND_STUDY
+        )
+      ).toEqual('[? – WnS] Lucie Laforêt');
+    });
+  });
 });
