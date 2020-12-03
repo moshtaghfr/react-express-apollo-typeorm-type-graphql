@@ -15,13 +15,13 @@ export enum TrainingType {
 registerEnumType(TrainingType, { name: 'TrainingType' });
 export const DEFAULT_TRAINING_TYPE = TrainingType.FULL_TIME;
 
-const getDisplayName = (
+export const getDisplayName = (
   firstName: string,
   lastName: string,
   city = DEFAULT_CITY,
   trainingType = DEFAULT_TRAINING_TYPE
 ): string => {
-  return '';
+  return `[${city || '?'}] ${firstName} ${lastName}`;
 };
 
 @Entity()
