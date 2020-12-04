@@ -19,6 +19,17 @@ const GET_WILDERS_MOCK = {
 };
 
 describe('WilderList', () => {
+  describe('while fetching wilders', () => {
+    it('renders loading indicator', () => {
+      render(
+        <MockedProvider mocks={[GET_WILDERS_MOCK]} addTypename={false}>
+          <App />
+        </MockedProvider>
+      );
+      expect(screen.getByText('Chargement en cours…')).toBeInTheDocument();
+    });
+  });
+
   describe('after fetching', () => {
     describe('if fetching succeeded', () => {
       it('renders wilders list', async () => {
