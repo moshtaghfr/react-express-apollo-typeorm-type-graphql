@@ -4,42 +4,17 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetBooks
+// GraphQL query operation: GetWilders
 // ====================================================
 
-export interface GetBooks_books {
-  __typename: "Book";
+export interface GetWilders_wilders {
+  __typename: "Wilder";
   id: string;
-  title: string;
+  displayName: string;
 }
 
-export interface GetBooks {
-  books: GetBooks_books[];
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL query operation: GetBookDetails
-// ====================================================
-
-export interface GetBookDetails_book {
-  __typename: "Book";
-  id: string;
-  title: string;
-  author: string;
-  isPublished: boolean;
-}
-
-export interface GetBookDetails {
-  book: GetBookDetails_book;
-}
-
-export interface GetBookDetailsVariables {
-  id: string;
+export interface GetWilders {
+  wilders: GetWilders_wilders[];
 }
 
 /* tslint:disable */
