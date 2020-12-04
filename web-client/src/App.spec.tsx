@@ -18,6 +18,13 @@ const GET_WILDERS_MOCK = {
   },
 };
 
+const GET_WILDERS_ERROR_MOCK = {
+  request: {
+    query: GET_WILDERS,
+  },
+  error: new Error('Server error.'),
+};
+
 describe('WilderList', () => {
   describe('while fetching wilders', () => {
     it('renders loading indicator', () => {
@@ -44,6 +51,19 @@ describe('WilderList', () => {
         expect(listElements).toHaveLength(2);
         expect(listElements[0]).toHaveTextContent('[?] Luc Bah');
         expect(listElements[1]).toHaveTextContent('[Lyon] Sophie Cé');
+      });
+    });
+
+    describe('if fetching failed', () => {
+      it('renders error message', async () => {
+        render(
+          <MockedProvider mocks={[GET_WILDERS_ERROR_MOCK]} addTypename={false}>
+            <App />
+          </MockedProvider>
+        );
+        await waitFor(() =>
+          expect(screen.getByText('Erreur de chargement.')).toBeInTheDocument()
+        );
       });
     });
   });
