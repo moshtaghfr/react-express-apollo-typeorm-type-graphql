@@ -45,6 +45,8 @@ describe('Server', () => {
       }
       `,
       });
+
+      expect(await Wilder.count({})).toEqual(1);
       expect(response.data).toEqual({
         createWilder: {
           id: '1',
