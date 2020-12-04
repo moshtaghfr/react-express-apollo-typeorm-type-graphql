@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, screen, waitFor, within } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 
 import App, { GET_WILDERS } from './App';
 
-const GET_WILDERS_MOCK = {
+const GET_WILDERS_SUCCESS_MOCK = {
   request: {
     query: GET_WILDERS,
   },
@@ -25,14 +25,18 @@ const GET_WILDERS_ERROR_MOCK = {
   error: new Error('Server error.'),
 };
 
+const renderApp = (mocks: MockedResponse<Record<string, unknown>>[]) => {
+  render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <App />
+    </MockedProvider>
+  );
+};
+
 describe('WilderList', () => {
   describe('while fetching wilders', () => {
     it('renders loading indicator', () => {
-      render(
-        <MockedProvider mocks={[GET_WILDERS_MOCK]} addTypename={false}>
-          <App />
-        </MockedProvider>
-      );
+      renderApp([GET_WILDERS_SUCCESS_MOCK]);
       expect(screen.getByText('Chargement en cours…')).toBeInTheDocument();
     });
   });
@@ -40,11 +44,7 @@ describe('WilderList', () => {
   describe('after fetching', () => {
     describe('if fetching succeeded', () => {
       it('renders wilders list', async () => {
-        render(
-          <MockedProvider mocks={[GET_WILDERS_MOCK]} addTypename={false}>
-            <App />
-          </MockedProvider>
-        );
+        renderApp([GET_WILDERS_SUCCESS_MOCK]);
         const list = await waitFor(() => screen.getByRole('list'));
         const listElements = within(list).getAllByRole('listitem');
 
@@ -56,11 +56,7 @@ describe('WilderList', () => {
 
     describe('if fetching failed', () => {
       it('renders error message', async () => {
-        render(
-          <MockedProvider mocks={[GET_WILDERS_ERROR_MOCK]} addTypename={false}>
-            <App />
-          </MockedProvider>
-        );
+        renderApp([GET_WILDERS_ERROR_MOCK]);
         await waitFor(() =>
           expect(screen.getByText('Erreur de chargement.')).toBeInTheDocument()
         );
