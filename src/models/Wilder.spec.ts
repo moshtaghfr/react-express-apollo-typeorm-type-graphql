@@ -15,10 +15,20 @@ describe('getDisplayName', () => {
   });
 
   describe('When passed city', () => {
-    it('returns display name with city', () => {
-      expect(
-        getDisplayName('Lucie', 'Laforêt', 'Paris', DEFAULT_TRAINING_TYPE)
-      ).toEqual('[Paris] Lucie Laforêt');
+    describe('When passed city without custom code', () => {
+      it('returns display name with city', () => {
+        expect(
+          getDisplayName('Lucie', 'Laforêt', 'Lyon', DEFAULT_TRAINING_TYPE)
+        ).toEqual('[Lyon] Lucie Laforêt');
+      });
+    });
+
+    describe('When passed city with custom code', () => {
+      it('returns display name with city code', () => {
+        expect(
+          getDisplayName('Lucie', 'Laforêt', 'Paris', DEFAULT_TRAINING_TYPE)
+        ).toEqual('[PAR] Lucie Laforêt');
+      });
     });
   });
 });
