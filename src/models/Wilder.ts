@@ -21,7 +21,13 @@ export const getDisplayName = (
   city = DEFAULT_CITY,
   trainingType = DEFAULT_TRAINING_TYPE
 ): string => {
-  return `[${city || '?'}] ${firstName} ${lastName}`;
+  const cityCode: Record<string, string> = {
+    Paris: 'PAR',
+    R1S: 'R1S',
+    Strasbourg: 'SXB',
+  };
+
+  return `[${cityCode[city] || city || '?'}] ${firstName} ${lastName}`;
 };
 
 @Entity()
