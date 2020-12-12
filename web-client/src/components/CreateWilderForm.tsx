@@ -24,7 +24,7 @@ const CreateWilderForm = (): JSX.Element => {
       >
         Cacher le formulaire
       </StyledButton>
-      <form>TODO: formulaire</form>
+      <form aria-label="form">TODO: formulaire</form>
     </>
   ) : (
     <StyledButton
