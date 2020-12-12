@@ -15,25 +15,17 @@ const StyledButton = styled.button`
 const CreateWilderForm = (): JSX.Element => {
   const [showForm, setShowForm] = useState(false);
 
-  return showForm ? (
+  return (
     <>
       <StyledButton
         onClick={() => {
-          setShowForm(false);
+          setShowForm(!showForm);
         }}
       >
-        Cacher le formulaire
+        {showForm ? 'Cacher le formulaire' : 'Montrer le formulaire'}
       </StyledButton>
-      <form aria-label="form">TODO: formulaire</form>
+      {showForm && <form aria-label="form">TODO: formulaire</form>}
     </>
-  ) : (
-    <StyledButton
-      onClick={() => {
-        setShowForm(true);
-      }}
-    >
-      Montrer le formulaire
-    </StyledButton>
   );
 };
 
