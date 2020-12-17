@@ -1,26 +1,24 @@
-import { createTestClient } from 'apollo-server-testing';
+import createTestClient from 'supertest';
 import { createConnection, getConnection } from 'typeorm';
 
-import { getApolloServer } from './apollo-server';
+import { getExpressServer } from './express-server';
+import UserSession from './models/UserSession';
 import Wilder from './models/Wilder';
 
 describe('Server', () => {
-  let query;
-  let mutate;
+  let testClient;
 
   beforeEach(async () => {
     await createConnection({
       type: 'sqlite',
       database: ':memory:',
       dropSchema: true,
-      entities: [Wilder],
+      entities: [Wilder, UserSession],
       synchronize: true,
       logging: false,
     });
-    const server = await getApolloServer();
-    const testClient = createTestClient(server);
-    mutate = testClient.mutate;
-    query = testClient.query;
+    const { expressServer } = await getExpressServer();
+    testClient = createTestClient(expressServer);
   });
 
   afterEach(() => {
@@ -45,7 +43,7 @@ describe('Server', () => {
       });
       await wilder2.save();
 
-      const response = await query({
+      const response = await testClient.post('/graphql').send({
         query: `{
         wilders {
           id
@@ -56,7 +54,7 @@ describe('Server', () => {
       `,
       });
 
-      expect(response.data).toEqual({
+      expect(JSON.parse(response.text).data).toEqual({
         wilders: [
           {
             firstName: 'Laure',
@@ -75,8 +73,8 @@ describe('Server', () => {
 
   describe('mutation createWilder', () => {
     it('creates and returns a new wilder', async () => {
-      const response = await mutate({
-        mutation: `mutation {
+      const response = await testClient.post('/graphql').send({
+        query: `mutation {
         createWilder(
           input: {
             username: "arnaudrenaud"
@@ -94,7 +92,7 @@ describe('Server', () => {
       });
 
       expect(await Wilder.count({})).toEqual(1);
-      expect(response.data).toEqual({
+      expect(JSON.parse(response.text).data).toEqual({
         createWilder: {
           id: '1',
           firstName: 'Arnaud',
