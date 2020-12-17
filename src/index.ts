@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import { createConnection } from 'typeorm';
 
 import { getApolloServer } from './apollo-server';
@@ -9,7 +10,7 @@ const main = async () => {
 
   const server = await getApolloServer();
 
-  const app = express();
+  const app = express().use(cookieParser());
   server.applyMiddleware({ app });
 
   app.listen({ port: 4000 }, () =>
