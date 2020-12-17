@@ -31,11 +31,15 @@ describe('Server', () => {
   describe('query wilders', () => {
     it('returns all wilders', async () => {
       const wilder1 = Wilder.create({
+        username: 'laurepincon',
+        password: 'laurepassword',
         firstName: 'Laure',
         lastName: 'Pinçon',
       });
       await wilder1.save();
       const wilder2 = Wilder.create({
+        username: 'pierreroulle',
+        password: 'pierrepassword',
         firstName: 'Pierre',
         lastName: 'Roulle',
       });
@@ -75,6 +79,8 @@ describe('Server', () => {
         mutation: `mutation {
         createWilder(
           input: {
+            username: "arnaudrenaud"
+            password: "bateaubateau"
             firstName: "Arnaud"
             lastName: "Renaud"
           }

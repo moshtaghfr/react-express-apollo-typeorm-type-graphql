@@ -1,9 +1,17 @@
-import { MaxLength } from 'class-validator';
+import { MaxLength, MinLength } from 'class-validator';
 import { InputType, Field } from 'type-graphql';
 import { TrainingType } from '../models/Wilder';
 
 @InputType()
 export default class CreateWilderInput {
+  @Field()
+  @MaxLength(25)
+  username!: string;
+
+  @Field()
+  @MinLength(8)
+  password!: string;
+
   @Field()
   @MaxLength(25)
   firstName!: string;

@@ -1,3 +1,4 @@
+import { hash } from 'bcrypt';
 import {
   Entity,
   BaseEntity,
@@ -39,6 +40,13 @@ export default class Wilder extends BaseEntity {
   @Field(() => ID)
   id!: string;
 
+  @Column({ unique: true })
+  @Field(() => String)
+  username!: string;
+
+  @Column()
+  password!: string;
+
   @Column()
   @Field(() => String)
   firstName!: string;
@@ -67,5 +75,10 @@ export default class Wilder extends BaseEntity {
       this.city,
       this.trainingType
     );
+  }
+
+  @BeforeInsert()
+  async hashPassword(): Promise<void> {
+    this.password = await hash(this.password, 10);
   }
 }
