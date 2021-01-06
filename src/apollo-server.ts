@@ -1,6 +1,8 @@
 import { ApolloServer } from 'apollo-server-express';
 import { Request, Response } from 'express';
 import { buildSchema } from 'type-graphql';
+
+import { setSessionIdCookie } from './express-server';
 import { getUserFromSessionId } from './models/Wilder';
 import WilderResolver from './resolvers/WilderResolver';
 
@@ -13,7 +15,7 @@ export const getApolloServer = async (): Promise<ApolloServer> => {
     const user = await getUserFromSessionId(sessionId);
 
     return {
-      res,
+      setSessionIdCookie: setSessionIdCookie(res),
       user,
     };
   };

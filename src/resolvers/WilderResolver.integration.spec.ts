@@ -228,9 +228,12 @@ describe('Wilder resolvers', () => {
           const userSession = await UserSession.findOneOrFail({
             user: wilder.id,
           });
-          expect(response.header['set-cookie'][0]).toEqual(
-            `sessionId=${userSession.uuid}; Max-Age=2592000; HttpOnly; SameSite=Strict`
-          );
+          const cookie = response.header['set-cookie'][0];
+          expect(cookie).toMatch(`sessionId=${userSession.uuid}`);
+          expect(cookie).toMatch(`Path=/`);
+          expect(cookie).toMatch(`Max-Age=2592000`);
+          expect(cookie).toMatch(`HttpOnly`);
+          expect(cookie).toMatch(`SameSite=Strict`);
         });
       });
     });

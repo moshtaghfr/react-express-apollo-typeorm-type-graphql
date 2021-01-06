@@ -1,6 +1,6 @@
 import { compare } from 'bcrypt';
-import { Response } from 'express';
 import { Resolver, Query, Mutation, Arg, Ctx } from 'type-graphql';
+
 import CreateSessionInput from '../inputs/CreateSessionInput';
 import CreateWilderInput from '../inputs/CreateWilderInput';
 import UserSession from '../models/UserSession';
@@ -31,7 +31,8 @@ export default class WilderResolver {
   @Mutation(() => Wilder)
   async createSession(
     @Arg('input') input: CreateSessionInput,
-    @Ctx() { res }: { res: Response }
+    @Ctx()
+    { setSessionIdCookie }: { setSessionIdCookie: (id: string) => void }
   ): Promise<Wilder> {
     const { username, password } = input;
     const user = await Wilder.findOne({ username });
@@ -47,11 +48,7 @@ export default class WilderResolver {
     }
     const userSession = UserSession.create({ user });
     await userSession.save();
-    res.set('set-cookie', [
-      `sessionId=${userSession.uuid}; Max-Age=2592000; HttpOnly;${
-        process.env.SECURE_COOKIES ? ' Secure;' : ''
-      } SameSite=Strict`,
-    ]);
+    setSessionIdCookie(userSession.uuid);
     return user;
   }
 }
