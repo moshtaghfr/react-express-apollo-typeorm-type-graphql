@@ -7,6 +7,7 @@ import {
   BeforeInsert,
 } from 'typeorm';
 import { ObjectType, Field, ID, registerEnumType } from 'type-graphql';
+import UserSession from './UserSession';
 
 export const DEFAULT_CITY = '';
 export enum TrainingType {
@@ -81,4 +82,15 @@ export default class Wilder extends BaseEntity {
   async hashPassword(): Promise<void> {
     this.password = await hash(this.password, 10);
   }
+}
+
+export async function getUserFromSessionId(
+  sessionId: string
+): Promise<Wilder | null> {
+  const userSession = await UserSession.findOne(
+    { uuid: sessionId },
+    { relations: ['user'] }
+  );
+  const user = userSession ? userSession.user : null;
+  return user;
 }

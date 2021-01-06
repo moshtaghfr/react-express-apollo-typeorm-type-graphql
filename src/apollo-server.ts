@@ -1,7 +1,7 @@
 import { ApolloServer } from 'apollo-server-express';
 import { Request, Response } from 'express';
 import { buildSchema } from 'type-graphql';
-import UserSession from './models/UserSession';
+import { getUserFromSessionId } from './models/Wilder';
 import WilderResolver from './resolvers/WilderResolver';
 
 export const getApolloServer = async (): Promise<ApolloServer> => {
@@ -10,11 +10,7 @@ export const getApolloServer = async (): Promise<ApolloServer> => {
   });
   const context = async ({ req, res }: { req: Request; res: Response }) => {
     const { sessionId } = req.cookies;
-    const userSession = await UserSession.findOne(
-      { uuid: sessionId },
-      { relations: ['user'] }
-    );
-    const user = userSession ? userSession.user : null;
+    const user = await getUserFromSessionId(sessionId);
 
     return {
       res,
