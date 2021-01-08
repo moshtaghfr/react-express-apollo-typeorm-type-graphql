@@ -47,7 +47,24 @@ const PictureGallery = (): JSX.Element => {
       files: [file],
     },
   }: any) => {
-    validity.valid && mutate({ variables: { file } });
+    validity.valid &&
+      mutate({
+        variables: { file },
+        update: (cache, { data }) => {
+          const existingData: GetPictures | null = cache.readQuery({
+            query: GET_PICTURES,
+          });
+          if (existingData && data) {
+            cache.writeQuery({
+              query: GET_PICTURES,
+              data: {
+                ...existingData,
+                pictures: [...existingData.pictures, data.uploadPicture],
+              },
+            });
+          }
+        },
+      });
   };
 
   return (
