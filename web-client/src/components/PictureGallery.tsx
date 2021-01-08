@@ -1,6 +1,7 @@
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import React from 'react';
 import styled from 'styled-components';
+import { GetPictures, UploadPicture } from '../schemaTypes';
 
 import { InputTypeFileButton } from './elements/Buttons';
 
@@ -18,19 +19,27 @@ const StyledPictureGalleryItemImage = styled.img`
   width: 100%;
 `;
 
+export const GET_PICTURES = gql`
+  query GetPictures {
+    pictures {
+      id
+      extension
+    }
+  }
+`;
+
 const UPLOAD_PICTURE = gql`
   mutation UploadPicture($file: Upload!) {
     uploadPicture(file: $file) {
       id
+      extension
     }
   }
 `;
 
 const PictureGallery = (): JSX.Element => {
-  const data = {
-    pictures: [],
-  };
-  const [mutate, { loading, error }] = useMutation(UPLOAD_PICTURE);
+  const { loading, error, data } = useQuery<GetPictures>(GET_PICTURES);
+  const [mutate] = useMutation<UploadPicture>(UPLOAD_PICTURE);
 
   const uploadPicture = ({
     target: {
@@ -54,15 +63,21 @@ const PictureGallery = (): JSX.Element => {
         />
         <label htmlFor="file">Ajouter une image</label>
       </form>
-      <StyledPictureGallery>
-        {data?.pictures.map(({ id }) => (
-          <StyledPictureGalleryItem key={id}>
-            <StyledPictureGalleryItemImage
-              src={`http://localhost:4000/public/media/pictures/${id}.jpg`}
-            />
-          </StyledPictureGalleryItem>
-        ))}
-      </StyledPictureGallery>
+      {loading ? (
+        <div>Chargement en cours…</div>
+      ) : error ? (
+        <div>Erreur de chargement.</div>
+      ) : (
+        <StyledPictureGallery>
+          {data?.pictures.map(({ id, extension }) => (
+            <StyledPictureGalleryItem key={id}>
+              <StyledPictureGalleryItemImage
+                src={`http://localhost:4000/public/media/pictures/${id}${extension}`}
+              />
+            </StyledPictureGalleryItem>
+          ))}
+        </StyledPictureGallery>
+      )}
     </>
   );
 };
