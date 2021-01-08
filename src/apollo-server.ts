@@ -4,11 +4,12 @@ import { buildSchema } from 'type-graphql';
 
 import { setSessionIdCookie } from './express-server';
 import { getUserFromSessionId } from './models/Wilder';
+import PictureResolver from './resolvers/PictureResolver';
 import WilderResolver from './resolvers/WilderResolver';
 
 export const getApolloServer = async (): Promise<ApolloServer> => {
   const schema = await buildSchema({
-    resolvers: [WilderResolver],
+    resolvers: [WilderResolver, PictureResolver],
   });
   const context = async ({ req, res }: { req: Request; res: Response }) => {
     const { sessionId } = req.cookies;
