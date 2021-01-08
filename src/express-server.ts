@@ -1,5 +1,7 @@
 import express, { Application, Response } from 'express';
 import cookieParser from 'cookie-parser';
+import path from 'path';
+
 import { getApolloServer } from './apollo-server';
 import { ApolloServer } from 'apollo-server-express';
 
@@ -9,8 +11,11 @@ export const getExpressServer = async (): Promise<{
 }> => {
   const apolloServer = await getApolloServer();
 
-  const expressServer = express().use(cookieParser());
+  const expressServer = express()
+    .use(cookieParser())
+    .use('/public', express.static(path.join(__dirname, '..', 'public')));
   apolloServer.applyMiddleware({ app: expressServer });
+
   return { expressServer, apolloServer };
 };
 

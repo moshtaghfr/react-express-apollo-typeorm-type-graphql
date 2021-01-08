@@ -186,3 +186,4 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/node,macos,linux,windows
 
 db.sqlite3
+public
