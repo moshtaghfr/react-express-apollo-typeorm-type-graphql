@@ -64,6 +64,25 @@ export interface GetWilders {
 // @generated
 // This file was automatically generated and should not be edited.
 
+// ====================================================
+// GraphQL subscription operation: SubscribeToNewWilder
+// ====================================================
+
+export interface SubscribeToNewWilder_newWilder {
+  __typename: "Wilder";
+  id: string;
+  displayName: string;
+}
+
+export interface SubscribeToNewWilder {
+  newWilder: SubscribeToNewWilder_newWilder;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
 //==============================================================
 // START Enums and Input Objects
 //==============================================================

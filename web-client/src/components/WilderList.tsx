@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import styled from 'styled-components';
 
-import { GetWilders } from '../schemaTypes';
+import { GetWilders, SubscribeToNewWilder } from '../schemaTypes';
 import ScrollToTopButton from './ScrollToTopButton';
 import CreateWilderForm from './CreateWilderForm';
 
@@ -33,8 +33,41 @@ export const GET_WILDERS = gql`
   }
 `;
 
+export const SUBSCRIBE_TO_NEW_WILDER = gql`
+  subscription SubscribeToNewWilder {
+    newWilder {
+      id
+      displayName
+    }
+  }
+`;
+
+const useGetWildersAndSubscribeToMore = () => {
+  const { loading, error, data, subscribeToMore } = useQuery<GetWilders>(
+    GET_WILDERS
+  );
+
+  const [isSubscribedToNewWilder, setIsSubscribedToNewWilder] = useState(false);
+  useEffect(() => {
+    if (!isSubscribedToNewWilder) {
+      subscribeToMore<SubscribeToNewWilder>({
+        document: SUBSCRIBE_TO_NEW_WILDER,
+        updateQuery: (prev, { subscriptionData }): GetWilders => {
+          if (!subscriptionData.data) return prev;
+          return {
+            wilders: [...prev.wilders, subscriptionData.data.newWilder],
+          };
+        },
+      });
+      setIsSubscribedToNewWilder(true);
+    }
+  }, [data]);
+
+  return { loading, error, data };
+};
+
 const PictureGallery = (): JSX.Element => {
-  const { loading, error, data } = useQuery<GetWilders>(GET_WILDERS);
+  const { loading, error, data } = useGetWildersAndSubscribeToMore();
 
   return (
     <>
