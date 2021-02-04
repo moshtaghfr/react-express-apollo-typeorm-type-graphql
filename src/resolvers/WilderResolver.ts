@@ -1,16 +1,37 @@
 import { compare } from 'bcrypt';
-import { Resolver, Query, Mutation, Arg, Ctx } from 'type-graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Arg,
+  Ctx,
+  Subscription,
+  Root,
+  PubSub,
+  Publisher,
+} from 'type-graphql';
 
 import CreateSessionInput from '../inputs/CreateSessionInput';
 import CreateWilderInput from '../inputs/CreateWilderInput';
 import UserSession from '../models/UserSession';
 import Wilder from '../models/Wilder';
 
+type NewWilderNotificationPayload = {
+  wilder: Wilder;
+};
+
 @Resolver()
 export default class WilderResolver {
   @Query(() => [Wilder])
   wilders(): Promise<Wilder[]> {
     return Wilder.find();
+  }
+
+  @Subscription({
+    topics: 'NEW_WILDER',
+  })
+  newWilder(@Root() notificationPayload: NewWilderNotificationPayload): Wilder {
+    return notificationPayload.wilder;
   }
 
   @Query(() => Wilder)
@@ -22,9 +43,14 @@ export default class WilderResolver {
   }
 
   @Mutation(() => Wilder)
-  async createWilder(@Arg('input') input: CreateWilderInput): Promise<Wilder> {
+  async createWilder(
+    @Arg('input') input: CreateWilderInput,
+    @PubSub('NEW_WILDER')
+    publishNewWilder: Publisher<NewWilderNotificationPayload>
+  ): Promise<Wilder> {
     const wilder = Wilder.create(input);
     await wilder.save();
+    publishNewWilder({ wilder });
     return wilder;
   }
 
