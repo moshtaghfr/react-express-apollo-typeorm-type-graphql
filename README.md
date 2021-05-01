@@ -6,7 +6,6 @@ Install dependencies server-side and start server:
 
 ```
 npm i
-npm run build
 npm run start:watch
 ```
 
