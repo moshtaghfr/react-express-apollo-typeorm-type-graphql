@@ -1,18 +1,9 @@
 # WnS project
 
-## Getting started
+## Development
 
-Install dependencies server-side and start server:
-
-```
-npm i
-npm run start:watch
-```
-
-Install dependencies client-side and start client-side server:
+Run in development environment with live reloading:
 
 ```
-cd web-client
-npm i
-npm start
+WEB_CLIENT_PORT=3000 API_PORT=4000 docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 ```
