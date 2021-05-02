@@ -1,4 +1,5 @@
 import express, { Application, Response } from 'express';
+import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import path from 'path';
 
@@ -16,6 +17,9 @@ export const getExpressServer = async (): Promise<{
   const expressServer = express()
     .use(cookieParser())
     .use('/public', express.static(path.join(__dirname, '..', 'public')));
+  if (process.env.NODE_ENV === 'development') {
+    expressServer.use(cors());
+  }
   apolloServer.applyMiddleware({ app: expressServer });
 
   return { expressServer, apolloServer, graphQLSchema };

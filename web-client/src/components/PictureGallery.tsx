@@ -1,6 +1,7 @@
 import { gql, useMutation, useQuery } from '@apollo/client';
 import React from 'react';
 import styled from 'styled-components';
+import { API_BASE_URL, HTTP_PROTOCOL } from '../config';
 import { GetPictures, UploadPicture } from '../schemaTypes';
 
 import { InputTypeFileButton } from './elements/Buttons';
@@ -89,7 +90,7 @@ const PictureGallery = (): JSX.Element => {
           {data?.pictures.map(({ id, extension }) => (
             <StyledPictureGalleryItem key={id}>
               <StyledPictureGalleryItemImage
-                src={`http://localhost:4000/public/media/pictures/${id}${extension}`}
+                src={`${HTTP_PROTOCOL}://${API_BASE_URL}/public/media/pictures/${id}${extension}`}
               />
             </StyledPictureGalleryItem>
           ))}
