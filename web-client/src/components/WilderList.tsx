@@ -78,7 +78,8 @@ const PictureGallery = (): JSX.Element => {
       ) : error ? (
         <div>Erreur de chargement.</div>
       ) : (
-        data && (
+        data &&
+        (data.wilders.length ? (
           <StyledWilderList>
             {data.wilders.map((wilder) => (
               <StyledWilderListItem key={wilder.id}>
@@ -88,7 +89,9 @@ const PictureGallery = (): JSX.Element => {
               </StyledWilderListItem>
             ))}
           </StyledWilderList>
-        )
+        ) : (
+          <div>Aucun wilder pour l’instant.</div>
+        ))
       )}
       <ScrollToTopButton />
     </>
