@@ -90,7 +90,7 @@ const PictureGallery = (): JSX.Element => {
             ))}
           </StyledWilderList>
         ) : (
-          <div>Aucun wilder pour l’instant.</div>
+          <div style={{ color: 'red' }}>Aucun wilder pour l’instant.</div>
         ))
       )}
       <ScrollToTopButton />
