@@ -14,17 +14,17 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { getMainDefinition } from '@apollo/client/utilities';
-import { API_BASE_URL } from './config';
+import { API_PORT } from './config';
 
 const GRAPHQL_ENDPOINT = '/graphql';
 
 const httpLink = createUploadLink({
-  uri: `${API_BASE_URL}${GRAPHQL_ENDPOINT}`,
+  uri: GRAPHQL_ENDPOINT,
 });
 
-const webSocketProtocolAndHost = API_BASE_URL?.startsWith('http')
-  ? API_BASE_URL.replace('http', 'ws')
-  : `${document.location.origin.replace('http', 'ws')}${API_BASE_URL}`;
+const webSocketProtocolAndHost = API_PORT
+  ? `ws://localhost:${API_PORT}`
+  : `${document.location.origin.replace('http', 'ws')}${GRAPHQL_ENDPOINT}`;
 
 const wsLink = new WebSocketLink({
   uri: `${webSocketProtocolAndHost}${GRAPHQL_ENDPOINT}`,

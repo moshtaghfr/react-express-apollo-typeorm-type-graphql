@@ -18,7 +18,6 @@ services:
       - web-client-build:/app/build
     environment:
       - NODE_ENV=production
-      - REACT_APP_API_BASE_URL=/api
 
   nginx:
     image: nginx:1.19.10
