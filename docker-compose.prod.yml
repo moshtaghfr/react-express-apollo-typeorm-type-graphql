@@ -21,6 +21,9 @@ services:
 
   nginx:
     image: nginx:1.19.10
+    depends_on:
+      - api
+      - web-client
     restart: always
     ports:
       - ${GATEWAY_PORT}:80
