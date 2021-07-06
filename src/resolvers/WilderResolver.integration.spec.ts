@@ -1,5 +1,5 @@
 import createTestClient from 'supertest';
-import { createConnection, getConnection } from 'typeorm';
+import { createConnection, getConnection, getConnectionOptions } from 'typeorm';
 
 import { getExpressServer } from '../express-server';
 import UserSession from '../models/UserSession';
@@ -9,9 +9,9 @@ describe('Wilder resolvers', () => {
   let testClient;
 
   beforeEach(async () => {
+    const connectionOptions = await getConnectionOptions();
     await createConnection({
-      type: 'sqlite',
-      database: ':memory:',
+      ...connectionOptions,
       dropSchema: true,
       entities: [Wilder, UserSession],
       synchronize: true,
