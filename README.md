@@ -26,6 +26,18 @@ Test web client only:
 ./test-web-client.sh
 ```
 
+Test API only (watch mode):
+
+```
+./test-api.watch.sh
+```
+
+Test web client only (watch mode):
+
+```
+./test-web-client.watch.sh
+```
+
 ## Deployment
 
 Run in production environment:
