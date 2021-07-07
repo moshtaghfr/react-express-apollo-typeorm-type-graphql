@@ -34,6 +34,11 @@ export default class WilderResolver {
     return notificationPayload.wilder;
   }
 
+  @Query(() => String)
+  todayNewWildersSummary(): string {
+    return 'No new wilders registered today.';
+  }
+
   @Query(() => Wilder)
   me(@Ctx() { user }: { user: Wilder | null }): Wilder {
     if (!user) {

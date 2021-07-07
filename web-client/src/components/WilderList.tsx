@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { GetWilders, SubscribeToNewWilder } from '../schemaTypes';
 import ScrollToTopButton from './ScrollToTopButton';
 import CreateWilderForm from './CreateWilderForm';
+import TodayNewWildersSummary from './TodayNewWildersSummary';
 
 const StyledWilderList = styled.ul`
   list-style-type: none;
@@ -66,12 +67,13 @@ const useGetWildersAndSubscribeToMore = () => {
   return { loading, error, data };
 };
 
-const PictureGallery = (): JSX.Element => {
+const WilderList = (): JSX.Element => {
   const { loading, error, data } = useGetWildersAndSubscribeToMore();
 
   return (
     <>
       <h1>Wilders</h1>
+      <TodayNewWildersSummary />
       <CreateWilderForm />
       {loading ? (
         <div>Chargement en cours…</div>
@@ -98,4 +100,4 @@ const PictureGallery = (): JSX.Element => {
   );
 };
 
-export default PictureGallery;
+export default WilderList;

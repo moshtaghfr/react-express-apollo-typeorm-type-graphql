@@ -4,6 +4,19 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: GetTodayNewWildersSummary
+// ====================================================
+
+export interface GetTodayNewWildersSummary {
+  todayNewWildersSummary: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: GetPictures
 // ====================================================
 
