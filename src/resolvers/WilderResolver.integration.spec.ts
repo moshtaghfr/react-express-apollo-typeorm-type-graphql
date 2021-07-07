@@ -71,6 +71,27 @@ describe('Wilder resolvers', () => {
     });
   });
 
+  describe('todayNewWildersSummary', () => {
+    it('returns summary of wilders registered today', async () => {
+      const wilder1 = Wilder.create({
+        username: 'laurepincon',
+        password: 'laurepassword',
+        firstName: 'Laure',
+        lastName: 'Pinçon',
+      });
+      await wilder1.save();
+
+      const response = await testClient.post('/graphql').send({
+        query: `{
+          todayNewWildersSummary
+      }
+      `,
+      });
+
+      expect(response.text).toMatch('Laure registered today.');
+    });
+  });
+
   describe('query me', () => {
     let wilder;
 

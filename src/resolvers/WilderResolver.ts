@@ -14,7 +14,7 @@ import {
 import CreateSessionInput from '../inputs/CreateSessionInput';
 import CreateWilderInput from '../inputs/CreateWilderInput';
 import UserSession from '../models/UserSession';
-import Wilder from '../models/Wilder';
+import Wilder, { getTodayNewWildersSummary } from '../models/Wilder';
 
 type NewWilderNotificationPayload = {
   wilder: Wilder;
@@ -35,8 +35,8 @@ export default class WilderResolver {
   }
 
   @Query(() => String)
-  todayNewWildersSummary(): string {
-    return 'No new wilders registered today.';
+  async todayNewWildersSummary(): Promise<string> {
+    return getTodayNewWildersSummary();
   }
 
   @Query(() => Wilder)

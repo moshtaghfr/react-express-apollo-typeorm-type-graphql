@@ -5,6 +5,8 @@ import {
   PrimaryGeneratedColumn,
   Column,
   BeforeInsert,
+  CreateDateColumn,
+  MoreThanOrEqual,
 } from 'typeorm';
 import { ObjectType, Field, ID, registerEnumType } from 'type-graphql';
 import UserSession from './UserSession';
@@ -45,6 +47,9 @@ export default class Wilder extends BaseEntity {
   @Field(() => String)
   username!: string;
 
+  @CreateDateColumn()
+  createdAt!: Date;
+
   @Column()
   password!: string;
 
@@ -83,6 +88,29 @@ export default class Wilder extends BaseEntity {
     this.password = await hash(this.password, 10);
   }
 }
+
+export const getTodayNewWildersSummary = async (): Promise<string> => {
+  const now = new Date(Date.now());
+  now.setHours(now.getHours() - 24);
+
+  const wilders = await Wilder.find({
+    where: { createdAt: MoreThanOrEqual(now) },
+  });
+  switch (wilders.length) {
+    case 0:
+      return 'Nobody registered today.';
+    case 1:
+      return `${wilders[0].firstName} registered today.`;
+    case 2:
+      return `${wilders[0].firstName} and ${wilders[1].firstName} registered today.`;
+    case 3:
+      return `${wilders[0].firstName}, ${wilders[1].firstName} and ${wilders[2].firstName} registered today.`;
+    default:
+      return `${wilders[0].firstName}, ${wilders[1].firstName} and ${
+        wilders.slice(2).length
+      } others registered today.`;
+  }
+};
 
 export async function getUserFromSessionId(
   sessionId: string
